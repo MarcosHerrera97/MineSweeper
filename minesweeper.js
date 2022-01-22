@@ -1,4 +1,6 @@
-//Create a readline module and interface in order to get input for the program
+/*We will be using the readline module, that is part of Node.Js, in
+order to get input from our user. 
+First we create a readline module and interface in order to get input for the program*/
 
 const readline = require("readline");
 
@@ -8,16 +10,18 @@ const rl = readline.createInterface({
   terminal: true
 });
 rl.pause();
-//This function generates a random number between 0 and within a given maximum
+
+//This function generates a random number between 0 and a given maximum
 
 function randomNumber(maxInt) {
   let myInt = Math.floor(Math.random() * maxInt);
   return myInt;
 }
 
-//create a grid with the appropraite width and mine count.
+/*This function determines the difficulty that the user has chosen and calls the createGrid function
+with the appropraite width and mine count that corresponds to that difficulty.*/
 
-function difficulty (option) {
+function difficultySelection (option) {
 
 //difficulty 1 = Easy | difficulty 2 = Medium | difficulty 3 = Hard | difficulty 4 = Extreme 
 
@@ -43,8 +47,7 @@ function difficulty (option) {
 
 }
 
-/*Function that creates the playing grid for the game. We use the difficulty selected by
-the user to determine the size of the grid and number of mines.*/
+//Function that creates the playing grid for the game.
 
 function createGrid(gridWidth, mineAmount) {
 
@@ -52,8 +55,8 @@ function createGrid(gridWidth, mineAmount) {
 
   const myGrid = new Array(gridWidth);
 
-//Populate the array with new arrays of the same length.
-//Doing this creates a square grid that we can use for our playing field 
+/*Populate the array with new arrays of the same length.
+Doing this creates a square grid that we can use for our playing field.*/
 
   for (let i = 0; i < gridWidth; i++) {
     myGrid[i] = new Array(gridWidth);
@@ -87,21 +90,35 @@ increasing the bomb count. Otherwise we plant a bomb in that location and increa
     myGrid[mineY][mineX] = '*';
     mineCount++;
   }
+//For Debugging
   console.log("\nHere is our current grid.");
   console.table(myGrid);
+//For Debugging
   return myGrid;
 }
+
+/*This function creates a promise, using the question we input when it was called,
+that must be resolved by the user before the program will continue. If we don't
+establish the Promise then the program will continue executing before
+we receive user input.*/
 
 function question(newQuestion){
   return new Promise(resolve => rl.question(newQuestion, answer => resolve(answer)));
 }
 
+/*This function is used to validate user input and repeatedly prompt
+the user to try again until a valid input has been received. If the
+user chooses not to try again, then we close the readline interface and
+exit the program.*/
 
 async function repeatProcess() {
+//we call our question funtion in order to prompt the user for an answer.
   const answer = await question("Would you like to try again?(y/n) ");
   switch (answer){
     case "y":
+//For Debugging
       console.log(answer);
+//For Debugging
       return true;
     case "n":
       rl.close();
@@ -118,10 +135,14 @@ async function repeatProcess() {
     default:
       console.log("\nThat is not a valid response.");
   }
+//Here we recursively call our function as we received an invalid response.
   let repeat = repeatProcess();
   return repeat;
 }
 
+/*This function is for debugging purposes!
+With this function we can test our random number generator funtion, with the
+added benefit of allowing the user to input a maximun bound of their choosing.*/
 
 async function debugRng(){
   console.log("This program will generate a random number for you.");
@@ -134,6 +155,9 @@ async function debugRng(){
   }
 }
 
+/*This is the main function of the minesweeper game. This will
+become the main function of our program once it is closer to completion.*/
+
 async function mineSweeper(){
   console.log("\nWelcome to Minesweeper!");
   console.log("We have four different difficulties for you to choose from.\n");
@@ -144,10 +168,13 @@ async function mineSweeper(){
   let playAgain = true;
   while (playAgain === true) {
     const reply = await question("Please select a difficulty by entering the corresponding number: ");
-    let playGrid = difficulty(reply);
+    let playGrid = difficultySelection(reply);
     playAgain = await repeatProcess();
   }
 }
+
+/*This is the main function of our program. Currently the user can access either the
+minesweeper game or our random number generator for debugging and other purposes.*/
 
 async function main () {
   let repeatAgain = true;

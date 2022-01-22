@@ -11,7 +11,8 @@ const rl = readline.createInterface({
 });
 rl.pause();
 
-//This function generates a random number between 0 and a given maximum
+/*This function generates a random integer between 0 and a given maximum,
+with 0 included and the maximun number not included.*/
 
 function randomNumber(maxInt) {
   let myInt = Math.floor(Math.random() * maxInt);
@@ -19,7 +20,7 @@ function randomNumber(maxInt) {
 }
 
 /*This function determines the difficulty that the user has chosen and calls the createGrid function
-with the appropraite width and mine count that corresponds to that difficulty.*/
+with the appropriate width and mine count that corresponds to that difficulty.*/
 
 function difficultySelection (option) {
 
